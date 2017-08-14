@@ -2,7 +2,13 @@
     "elements": {},
     "attributes": {
         "th:text": {},
+        "th:if": {},
+        "th:unless": {},
         "th:src": {},
-        "th:href": {}
+        "th:action": {},
+        "th:replace": {},
+        "th:href": {},
+        "th:fragment": {},
+        "th:value": {}
     }
 }
