@@ -16,6 +16,8 @@ public interface PessoaService {
     
     public PessoaDto newDto();
     public void save(PessoaDto pessoaDto);
+    public void delete(PessoaDto pessoa);
+    public PessoaDto findOne(Long id);
     public List<PessoaDto> findAll();
     
 }

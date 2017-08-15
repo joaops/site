@@ -4,7 +4,6 @@ import br.com.joaops.site.dto.PessoaDto;
 import br.com.joaops.site.model.Pessoa;
 import br.com.joaops.site.model.dao.PessoaRepository;
 import br.com.joaops.site.service.PessoaService;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +30,27 @@ public class PessoaServiceImpl implements PessoaService {
     }
     
     @Override
+    public void delete(PessoaDto pessoa) {
+        pessoaRepository.remove(pessoa.getId());
+    }
+    
+    @Override
+    public PessoaDto findOne(Long id) {
+        Pessoa pessoa = pessoaRepository.findOne(id);
+        PessoaDto pessoaDto = null;
+        if (pessoa != null) {
+            pessoaDto = mapper(pessoa);
+        }
+        return pessoaDto;
+    }
+    
+    @Override
     public List<PessoaDto> findAll() {
         List<PessoaDto> pessoasDto = new ArrayList<>();
         Iterable<Pessoa> pessoas = pessoaRepository.findAll();
         pessoas.forEach(pessoa -> {
-            PessoaDto pessoaDto = mapper(pessoa);
-            if (pessoaDto != null) {
-                pessoasDto.add(pessoaDto);
-            }
+            PessoaDto pessoaDto = mapper(pessoa);;
+            pessoasDto.add(pessoaDto);
         });
         return pessoasDto;
     }

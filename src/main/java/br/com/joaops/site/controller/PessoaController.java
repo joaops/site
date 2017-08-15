@@ -44,19 +44,29 @@ public class PessoaController {
     
     @RequestMapping(value = "/{id}/mostrar", method = RequestMethod.GET)
     public ModelAndView mostrar(@PathVariable Long id) {
-        ModelAndView mav = new ModelAndView("redirect:/pessoa");
+        ModelAndView mav = new ModelAndView("/pessoa/mostrar");
+        mav.addObject("pessoa", pessoaService.findOne(id));
         return mav;
     }
     
     @RequestMapping(value = "/{id}/alterar", method = RequestMethod.GET)
     public ModelAndView alterar(@PathVariable Long id) {
-        ModelAndView mav = new ModelAndView("redirect:/pessoa");
+        ModelAndView mav = new ModelAndView("/pessoa/alterar");
+        mav.addObject("pessoa", pessoaService.findOne(id));
         return mav;
     }
     
     @RequestMapping(value = "/{id}/deletar", method = RequestMethod.GET)
     public ModelAndView deletar(@PathVariable Long id) {
+        ModelAndView mav = new ModelAndView("/pessoa/deletar");
+        mav.addObject("pessoa", pessoaService.findOne(id));
+        return mav;
+    }
+    
+    @RequestMapping(value = "/deletar", method = RequestMethod.POST)
+    public ModelAndView deletar(PessoaDto pessoa) {
         ModelAndView mav = new ModelAndView("redirect:/pessoa");
+        pessoaService.delete(pessoa);
         return mav;
     }
     
