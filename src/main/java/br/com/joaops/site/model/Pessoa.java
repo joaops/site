@@ -3,15 +3,38 @@ package br.com.joaops.site.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
  * @author João Paulo
  */
+@Entity
+@Table(schema = "public",
+        name = "pessoa",
+        indexes = {
+            @Index(name = "idx_id_pessoa", columnList = "id_pessoa")
+        }
+)
+@SequenceGenerator(name = "PessoaIdGenerator", sequenceName = "seq_pessoa", initialValue = 1, allocationSize = 1)
 public class Pessoa implements Serializable {
     
+    @Id
+    @Column(name = "id_pessoa", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PessoaIdGenerator")
     private Long id;
+    
+    @Column(name = "nome")
     private String nome;
+    
+    @Column(name = "data_nascimento")
     private LocalDate nascimento;
     
     public Pessoa() {

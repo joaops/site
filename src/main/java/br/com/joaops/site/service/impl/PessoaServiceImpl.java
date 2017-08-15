@@ -31,7 +31,7 @@ public class PessoaServiceImpl implements PessoaService {
     
     @Override
     public void delete(PessoaDto pessoa) {
-        pessoaRepository.remove(pessoa.getId());
+        pessoaRepository.delete(pessoa.getId());
     }
     
     @Override

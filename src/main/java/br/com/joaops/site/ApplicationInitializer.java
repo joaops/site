@@ -3,6 +3,8 @@ package br.com.joaops.site;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,6 +29,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         sc.addListener(new ContextLoaderListener(context));
         sc.addFilter("CharacterEncodingFilter", getCharacterEncodingFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
         sc.addFilter("RequestContextFilter", getRequestContextFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
+        sc.addFilter("OpenEntityManagerInViewFilter", getOpenEntityManagerInViewFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
         ServletRegistration.Dynamic dispatcher = sc.addServlet("LoversBookServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.setAsyncSupported(Boolean.TRUE);
@@ -50,6 +53,12 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     private RequestContextFilter getRequestContextFilter() {
         RequestContextFilter requestContextFilter = new RequestContextFilter();
         return requestContextFilter;
+    }
+    
+    private OpenEntityManagerInViewFilter getOpenEntityManagerInViewFilter() {
+        OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
+        openEntityManagerInViewFilter.setEntityManagerFactoryBeanName("entityManagerFactory");
+        return openEntityManagerInViewFilter;
     }
     
 }
