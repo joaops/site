@@ -1,4 +1,4 @@
-package br.com.joaops.site.model;
+package br.com.joaops.site.model.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -29,16 +29,10 @@ public class PersistenceConfig {
     
     @Bean
     public DataSource dataSource() {
-        try {
-            System.out.println("Banco de Dados: " + System.getenv("POSTGRESQL_DATABASE"));
-            System.out.println("Usuário do Banco de Dados: " + System.getenv("POSTGRESQL_USER"));
-            System.out.println("Senha do Banco de Dados: " + System.getenv("POSTGRESQL_PASSWORD"));
-        } catch (Exception e) {
-            System.err.println("ERRO: " + e);
-        }
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://172.30.213.205:5432/sampledb");
+        //dataSource.setUrl("jdbc:postgresql://172.30.213.205:5432/sampledb");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/sampledb");
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         return dataSource;
@@ -55,7 +49,7 @@ public class PersistenceConfig {
     
     private String[] getPackagesToScan() {
         ArrayList<String> packages = new ArrayList<>();
-        packages.add("br.com.joaops.site.model");
+        packages.add("br.com.joaops.site.model.domain");
         return packages.toArray(new String[packages.size()]);
     }
     

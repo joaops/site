@@ -1,7 +1,7 @@
 package br.com.joaops.site.service.impl;
 
 import br.com.joaops.site.dto.PessoaDto;
-import br.com.joaops.site.model.Pessoa;
+import br.com.joaops.site.model.domain.Pessoa;
 import br.com.joaops.site.model.dao.PessoaRepository;
 import br.com.joaops.site.service.PessoaService;
 import java.util.ArrayList;
