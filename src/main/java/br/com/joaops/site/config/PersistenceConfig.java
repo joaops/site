@@ -31,7 +31,7 @@ public class PersistenceConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost/site");
+        dataSource.setUrl("jdbc:postgresql://localhost/sampledb");
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         return dataSource;
