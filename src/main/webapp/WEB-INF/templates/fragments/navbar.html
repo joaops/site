@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
-        <title>Pessoa</title>
+        <title>NavBar</title>
         <link rel="shortcut icon" href="../../resources/images/favicon2.ico" th:href="@{'/resources/images/favicon2.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
@@ -23,7 +23,27 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="#" th:href="@{'/pessoa'}" th:text="'Pessoas'">Pessoas</a></li>
+                        <li class="dropdown" sec:authorize="hasAnyRole('ROLE_SYSTEM_USER_READ')" >
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sistema <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li sec:authorize="hasAnyRole('ROLE_SYSTEM_USER_READ')"><a href="#" th:href="@{/system/user}" th:text="'Usuários'">Usuários</a></li>
+                            </ul>
+                        </li>
+                        <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{'/pessoa'}" th:text="'Pessoas'">Pessoas</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" sec:authorize="isAnonymous()">
+                        <li>
+                            <form class="navbar-form navbar-right" accept-charset="UTF-8" role="form" th:action="@{/login}" method="get">
+                                <button type="submit" class="btn btn-default btn-sm" th:text="Login">Login</button>
+                            </form>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
+                        <li>
+                            <form class="navbar-form navbar-right" accept-charset="UTF-8" role="form" th:action="@{/logout}" method="post">
+                                <button type="submit" class="btn btn-default btn-sm" th:text="Logout">Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

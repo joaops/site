@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="João Paulo Siqueira"/>
+        <title>Login</title>
+        <link type="image/x-icon" rel="icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
+        <link type="text/css" rel="stylesheet" href="../../resources/css/login.css" th:href="@{'/resources/css/login.css'}" />
+        <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}" />
+    </head>
+    <body>
+        <nav th:replace="fragments/navbar :: navbar"></nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 col-xs-6 col-xs-offset-3">
+                    <form class="form-horizontal" method="post" th:action="@{/login/check}">
+                        <div class="form-group">
+                            <div class="col-md-9 col-md-offset-3 col-xs-12">
+                                <h3>
+                                    <span class="label label-danger" th:if="${error != null}" th:text="'Usuário ou Senha Inválidos!'">Usuário ou Senha Inválidos!</span>
+                                    <span class="label label-success" th:if="${logout != null}" th:text="'Logout Realizado Com Sucesso'">Logout Realizado Com Sucesso</span>
+                                </h3>
+                                <h2 class="form-signin-heading">Login</h2>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="username" th:text="'Email'">Email</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="username" name="username" type="email"  placeholder="Email address" required autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="password" th:text="Password">Password</label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="password" name="password" type="password" placeholder="Password" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-3">
+                                <button class="btn btn-sm btn-default" type="submit" th:text="'Login in'">Login in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
+        <script type="text/javascript" src="../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
+    </body>
+</html>

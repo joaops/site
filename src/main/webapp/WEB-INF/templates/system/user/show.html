@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="João Paulo Siqueira"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Usuários</title>
+        <link type="image/x-icon" rel="icon" href="../../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
+        <link type="text/css" rel="stylesheet" href="../../../resources/css/style.css" th:href="@{'/resources/css/style.css'}" />
+        <link type="text/css" rel="stylesheet" href="../../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}" />
+    </head>
+    <body>
+        <nav th:replace="fragments/navbar :: navbar"></nav>
+        <div id="container" class="ajusta-navbar">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h1 class="text-center">Dados do Usuário</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive col-md-6 col-md-offset-3">
+                        <table class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Campos</th>
+                                    <th>Dados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Nome'">Nome</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.firstName}+' '+${user.lastName}">Nome</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'E-Mail'">E-Mail</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.email}">E-Mail</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Ativo?'">Ativo?</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.enabled}?'Sim':'Não'">Ativo</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Conta Bloqueada'">Conta Bloqueada</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.locked}?'Sim':'Não'">Sim</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'A Conta Pode Expirar?'">A Conta Pode Expirar?</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.accountCanExpire}?'Sim':'Não'">Sim</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Data de Expiração da Conta'">Data de Expiração da Conta</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="(${user.accountExpiration}==null)?'':${#calendars.format(user.accountExpiration,'dd/MM/yyyy')}">01/01/2000</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Credencial Pode Expirar?'">Credencial Pode Expirar?</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="${user.credentialCanExpire}?'Sim':'Não'">Sim</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label th:text="'Data de Expiração da Credencial'">Data de Expiração da Credencial</label>
+                                    </td>
+                                    <td>
+                                        <label th:text="(${user.credentialExpiration}==null)?'':${#calendars.format(user.credentialExpiration,'dd/MM/yyyy')}">01/01/2000</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h1 class="text-center">Permissões do Usuário</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="table-responsive col-md-6 col-md-offset-3">
+                        <table class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Nome</th>
+                                    <th>Read</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(user.systemUserPermission)}">
+                                    <td colspan="6">Nenhuma Permissão Encontrada</td>
+                                </tr>
+                                <tr th:unless="${#lists.isEmpty(user.systemUserPermission)}" th:each="permission : ${user.systemUserPermission}">
+                                    <td th:text="${permission.systemUserPermissionId.systemModule.category}">category</td>
+                                    <td th:text="${permission.systemUserPermissionId.systemModule.name}">name</td>
+                                    <td th:text="${permission.read}">false</td>
+                                    <td th:text="${permission.add}">false</td>
+                                    <td th:text="${permission.edit}">false</td>
+                                    <td th:text="${permission.delete}">false</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1 col-md-offset-3">
+                        <a class="btn btn-sm btn-primary" href="#" th:href="@{'/system/user'}" th:text="'Voltar'">Voltar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
+        <script type="text/javascript" src="../../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
+    </body>
+</html>

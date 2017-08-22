@@ -19,7 +19,7 @@
                             <h3 class="panel-title">HOME</h3>
                         </div>
                         <div class="panel-body">
-                            <p>Seja Bem Vindo: <span th:text="${nome}">Nome</span></p>
+                            <p th:if="${nome != null}">Seja Bem Vindo: <span th:text="${nome}">Nome</span></p>
                         </div>
                     </div>
                 </div>

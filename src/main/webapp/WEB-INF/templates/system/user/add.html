@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="João Paulo Siqueira"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Adicionar Usuário</title>
+        <link type="image/x-icon" rel="icon" href="../../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
+        <link type="text/css" rel="stylesheet" href="../../../resources/css/style.css" th:href="@{'/resources/css/style.css'}" />
+        <link type="text/css" rel="stylesheet" href="../../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}" />
+    </head>
+    <body>
+        <nav th:replace="fragments/navbar :: navbar"></nav>
+        <div id="container" class="ajusta-navbar">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">Adicionar Usuário</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <form class="form-horizontal" action="#" method="POST" th:action="@{/system/user/save}" th:method="POST" th:object="${user}">
+                            <input type="text" hidden="hidden" th:value="*{id}" th:field="*{id}" />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="inputNome" th:text="'Nome'">Nome</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="inputNome" type="text" th:value="*{firstName}" th:field="*{firstName}" />
+                                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Erro no Campo Primeiro Nome</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="inputSobrenome" th:text="'Sobrenome'">Sobrenome</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="inputSobrenome" type="text" th:value="*{lastName}" th:field="*{lastName}" />
+                                    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Erro no Campo Último Nome</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="inputEmail" th:text="'E-Mail'">E-Mail</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="inputEmail" type="email" th:value="*{email}" th:field="*{email}" />
+                                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Erro no Campo E-Mail</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="inputSenha" th:text="'Senha'">Senha</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="inputSenha" type="password" th:value="*{password}" th:field="*{password}" />
+                                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Erro no Campo Senha</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 text-right" for="inputEnabled" th:text="'Ativo'">Ativo</label>
+                                <div class="col-sm-1">
+                                    <input id="inputEnabled" type="checkbox" th:checked="*{enabled}" th:field="*{enabled}" />
+                                    <p th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}">Erro no Campo Ativo</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 text-right" for="inputLocked" th:text="'Bloqueado'">Bloqueado</label>
+                                <div class="col-sm-1">
+                                    <input id="inputLocked" type="checkbox" th:checked="*{locked}" th:field="*{locked}" />
+                                    <p th:if="${#fields.hasErrors('locked')}" th:errors="*{locked}">Erro no Campo Bloqueado</p> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 text-right" for="inputAccountCanExpire" th:text="'A Conta Expirar?'">A Conta Expirar?</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <input id="inputAccountCanExpire" type="checkbox" th:checked="*{accountCanExpire}" th:field="*{accountCanExpire}" />
+                                        </span>
+                                        <input class="form-control" type="date" th:value="*{accountExpiration}" th:field="*{accountExpiration}" />
+                                        <p th:if="${#fields.hasErrors('accountCanExpire')}" th:errors="*{accountCanExpire}">Erro no Campo Checkbox da Expiração da Conta</p>
+                                        <p th:if="${#fields.hasErrors('accountExpiration')}" th:errors="*{accountExpiration}">Erro no Campo de Data de Expiração da Conta</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 text-right" for="inputCredentialCanExpire" th:text="'A Credencial Expirar?'">A Credencial Expirar?</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <input id="inputCredentialCanExpire" type="checkbox" th:checked="*{credentialCanExpire}" th:field="*{credentialCanExpire}" />
+                                        </span>
+                                        <input class="form-control" type="date" th:value="*{credentialExpiration}" th:field="*{credentialExpiration}" />
+                                        <p th:if="${#fields.hasErrors('credentialCanExpire')}" th:errors="*{credentialCanExpire}">Erro no Campo Checkbox de Expiração da Credencial</p>
+                                        <p th:if="${#fields.hasErrors('credentialExpiration')}" th:errors="*{credentialExpiration}">Erro no Campo de Data de Expiração da Credencial</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 pull-right">
+                                    <input class="btn btn-success btn-xs" type="button" value="Adicionar" onclick="addLinha('idTBody');">
+                                    <input class="btn btn-danger btn-xs" type="button" value="Remover" onclick="removeLinha();">
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-condensed table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoria/Módulo</th>
+                                            <th>Read</th>
+                                            <th>Create</th>
+                                            <th>Update</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="idTBody">
+                                        <tr th:unless="${#lists.isEmpty(user.systemUserPermission)}" th:id="'idTR'+${itrStat.index}" th:each="permission, itrStat : ${user.systemUserPermission}">
+                                            <td>
+                                                <select th:field="${user.systemUserPermission[__${itrStat.index}__].systemUserPermissionId.systemModule.id}">
+                                                    <option th:each="module : ${modules}" th:value="${module.id}" th:text="${module.category}+' / '+${module.name}">Categoria / Módulo</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="checkbox" th:checked="${permission.read}" th:field="${user.systemUserPermission[__${itrStat.index}__].read}"></td>
+                                            <td><input type="checkbox" th:checked="${permission.add}" th:field="${user.systemUserPermission[__${itrStat.index}__].add}"></td>
+                                            <td><input type="checkbox" th:checked="${permission.edit}" th:field="${user.systemUserPermission[__${itrStat.index}__].edit}"></td>
+                                            <td><input type="checkbox" th:checked="${permission.delete}" th:field="${user.systemUserPermission[__${itrStat.index}__].delete}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 pull-right">
+                                    <button class="btn btn-sm btn-danger" type="submit" value="submit">Salvar</button>
+                                    <a class="btn btn-sm btn-primary" href="#" th:href="@{'/system/user'}" th:text="'Cancelar'">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
+        <script type="text/javascript" src="../../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+                var idModulo = [];
+                var nomeModulo = [];
+                var categoriaModulo = [];
+            /*]]>*/
+        </script>
+        <script th:inline="javascript" th:each="module,iterStat : ${modules}">
+            /*<![CDATA[*/
+                idModulo.push(/*[[${module.id}]]*/);
+                nomeModulo.push(/*[[${module.name}]]*/);
+                categoriaModulo.push(/*[[${module.category}]]*/);
+            /*]]>*/
+        </script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+                
+                var counter = /*[[${#lists.size(user.systemUserPermission)}]]*/ 0;
+                
+                function addLinha(tbodyName) {
+                    var newtr = document.createElement('tr');
+                    newtr.setAttribute("id", "idTR" + counter);
+                    var str = 
+                        "<td>" +
+                            "<select id='systemUserPermission" + counter + ".systemUserPermissionId.systemModule.id' name='systemUserPermission[" + counter + "].systemUserPermissionId.systemModule.id'>";
+                                for (var i = 0; i < idModulo.length; i++) {
+                                    str += "<option value='"+idModulo[i]+"'>"+categoriaModulo[i]+" / "+nomeModulo[i]+"</option>";
+                                }
+                            str += 
+                            "</select>" +
+                        "</td>" +
+                        "<td><input type='checkbox' id='systemUserPermission" + counter + ".read1' name='systemUserPermission[" + counter + "].read'><input type='hidden' name='_systemUserPermission[" + counter + "].read' value='on'></td>" +
+                        "<td><input type='checkbox' id='systemUserPermission" + counter + ".add1' name='systemUserPermission[" + counter + "].add'><input type='hidden' name='_systemUserPermission[" + counter + "].add' value='on'></td>" +
+                        "<td><input type='checkbox' id='systemUserPermission" + counter + ".edit1' name='systemUserPermission[" + counter + "].edit'><input type='hidden' name='_systemUserPermission[" + counter + "].edit' value='on'></td>" +
+                        "<td><input type='checkbox' id='systemUserPermission" + counter + ".delete1' name='systemUserPermission[" + counter + "].delete'><input type='hidden' name='_systemUserPermission[" + counter + "].delete' value='on'></td>";
+                    newtr.innerHTML = str;
+                    document.getElementById(tbodyName).appendChild(newtr);
+                    counter++;
+                }
+                
+                function removeLinha() {
+                    if (counter > 0) {
+                        counter--;
+                        var elem = document.getElementById("idTR" + counter);
+                        elem.parentElement.removeChild(elem);
+                    }
+                }
+                
+            /*]]>*/
+        </script>
+    </body>
+</html>

@@ -6,9 +6,11 @@
         "th:unless": {},
         "th:src": {},
         "th:action": {},
+        "sec:authorize": {},
         "th:replace": {},
         "th:href": {},
         "th:fragment": {},
-        "th:value": {}
+        "th:value": {},
+        "th:class": {}
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -30,6 +31,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         sc.addFilter("CharacterEncodingFilter", getCharacterEncodingFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
         sc.addFilter("RequestContextFilter", getRequestContextFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
         sc.addFilter("OpenEntityManagerInViewFilter", getOpenEntityManagerInViewFilter()).addMappingForUrlPatterns(null, true, MAPPING_URL);
+        sc.addFilter("securityFilter", getDelegatingFilterProxy()).addMappingForUrlPatterns(null, true, MAPPING_URL);
         ServletRegistration.Dynamic dispatcher = sc.addServlet("LoversBookServlet", new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.setAsyncSupported(Boolean.TRUE);
@@ -59,6 +61,11 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
         openEntityManagerInViewFilter.setEntityManagerFactoryBeanName("entityManagerFactory");
         return openEntityManagerInViewFilter;
+    }
+    
+    private DelegatingFilterProxy getDelegatingFilterProxy() {
+        DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("springSecurityFilterChain");
+        return delegatingFilterProxy;
     }
     
 }

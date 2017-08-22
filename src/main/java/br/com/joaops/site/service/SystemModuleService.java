@@ -5,7 +5,7 @@
  */
 package br.com.joaops.site.service;
 
-import br.com.joaops.site.dto.PessoaDto;
+import br.com.joaops.site.dto.SystemModuleDto;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +14,13 @@ import org.springframework.data.domain.Pageable;
  *
  * @author João Paulo
  */
-public interface PessoaService {
+public interface SystemModuleService {
     
-    public PessoaDto newDto();
-    public void save(PessoaDto pessoaDto);
-    public void delete(PessoaDto pessoa);
-    public PessoaDto findOne(Long id);
-    public List<PessoaDto> findAll();
-    public Page<PessoaDto> findAll(Pageable p);
+    public SystemModuleDto newSystemModule();
+    public SystemModuleDto save(SystemModuleDto moduleDto);
+    public SystemModuleDto findOne(Long id);
+    public void delete(Long id);
+    public List<SystemModuleDto> searchAllModules();
+    public Page<SystemModuleDto> searchAllModules(Pageable p);
     
 }

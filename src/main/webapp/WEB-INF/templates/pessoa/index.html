@@ -32,10 +32,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:if="${#lists.isEmpty(pessoas)}">
+                                    <tr th:if="${#lists.isEmpty(page.content)}">
                                         <td colspan="4">Nenhuma Pessoa Cadastrada.</td>
                                     </tr>
-                                    <tr th:unless="${#lists.isEmpty(pessoas)}" th:each="pessoa : ${pessoas}">
+                                    <tr th:unless="${#lists.isEmpty(page.content)}" th:each="pessoa : ${page.content}">
                                         <td th:text="${pessoa.id}">Id</td>
                                         <td th:text="${pessoa.nome}">Nome</td>
                                         <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
@@ -52,6 +52,7 @@
                 </div>
             </div>
         </div>
+        <nav th:replace="fragments/pagination :: pagination"></nav>
         <script type="text/javascript" src="../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
         <script type="text/javascript" src="../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
     </body>

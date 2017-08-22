@@ -18,7 +18,7 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("/home/index");
-        mav.addObject("nome", "João Paulo Siqueira");
+        mav.addObject("nome", (request.getUserPrincipal() == null) ? null : request.getUserPrincipal().getName());
         return mav;
     }
     
