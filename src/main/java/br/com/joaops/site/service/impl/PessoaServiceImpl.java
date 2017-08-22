@@ -1,11 +1,13 @@
 package br.com.joaops.site.service.impl;
 
 import br.com.joaops.site.dto.PessoaDto;
+import br.com.joaops.site.mapper.PessoaMapper;
 import br.com.joaops.site.model.domain.Pessoa;
 import br.com.joaops.site.model.dao.PessoaRepository;
 import br.com.joaops.site.service.PessoaService;
 import java.util.ArrayList;
 import java.util.List;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class PessoaServiceImpl implements PessoaService {
     
     @Autowired
+    private Mapper mapper;
+    
+    @Autowired
     private PessoaRepository pessoaRepository;
     
     @Override
@@ -26,7 +31,14 @@ public class PessoaServiceImpl implements PessoaService {
     
     @Override
     public void save(PessoaDto pessoaDto) {
-        pessoaRepository.save(mapper(pessoaDto));
+        Pessoa pessoa = null;
+        if (pessoaDto != null) {
+            pessoa = new Pessoa();
+            mapper.map(pessoaDto, pessoa);
+        }
+        if (pessoa != null) {
+            pessoaRepository.save(pessoa);
+        }
     }
     
     @Override
@@ -39,7 +51,7 @@ public class PessoaServiceImpl implements PessoaService {
         Pessoa pessoa = pessoaRepository.findOne(id);
         PessoaDto pessoaDto = null;
         if (pessoa != null) {
-            pessoaDto = mapper(pessoa);
+            pessoaDto = mapper.map(pessoa, PessoaDto.class);
         }
         return pessoaDto;
     }
@@ -49,24 +61,10 @@ public class PessoaServiceImpl implements PessoaService {
         List<PessoaDto> pessoasDto = new ArrayList<>();
         Iterable<Pessoa> pessoas = pessoaRepository.findAll();
         pessoas.forEach(pessoa -> {
-            PessoaDto pessoaDto = mapper(pessoa);;
+            PessoaDto pessoaDto = mapper.map(pessoa, PessoaDto.class);
             pessoasDto.add(pessoaDto);
         });
         return pessoasDto;
-    }
-    
-    private PessoaDto mapper(Pessoa pessoa) {
-        if (pessoa == null) {
-            return null;
-        }
-        return new PessoaDto(pessoa.getId(), pessoa.getNome(), pessoa.getNascimento());
-    }
-    
-    private Pessoa mapper(PessoaDto pessoaDto) {
-        if (pessoaDto == null) {
-            return null;
-        }
-        return new Pessoa(pessoaDto.getId(), pessoaDto.getNome(), pessoaDto.getNascimento());
     }
     
 }

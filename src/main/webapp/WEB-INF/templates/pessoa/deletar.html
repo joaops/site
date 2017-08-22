@@ -35,7 +35,7 @@
                                     <tr th:unless="${pessoa == null}">
                                         <td th:text="${pessoa.id}">Id</td>
                                         <td th:text="${pessoa.nome}">Nome</td>
-                                        <td th:text="${pessoa.nascimento}">Data de Nascimento</td>
+                                        <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
                                         <td>
                                             <form action="#" method="POST" th:action="@{'/pessoa/deletar'}" th:method="POST" th:object="${pessoa}">
                                                 <input hidden="hidden" type="number" th:value="*{id}" th:field="*{id}" />

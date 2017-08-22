@@ -2,6 +2,7 @@ package br.com.joaops.site.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,13 +16,13 @@ public class PessoaDto implements Serializable {
     private Long id;
     private String nome;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate nascimento;
+    private Date nascimento;
     
     public PessoaDto() {
-        this(0L, "", LocalDate.MIN);
+        this(0L, "", new Date());
     }
     
-    public PessoaDto(Long id, String nome, LocalDate nascimento) {
+    public PessoaDto(Long id, String nome, Date nascimento) {
         this.id = id;
         this.nome = nome;
         this.nascimento = nascimento;
@@ -42,15 +43,15 @@ public class PessoaDto implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public LocalDate getNascimento() {
+    
+    public Date getNascimento() {
         return nascimento;
     }
-
-    public void setNascimento(LocalDate nascimento) {
+    
+    public void setNascimento(Date nascimento) {
         this.nascimento = nascimento;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 5;

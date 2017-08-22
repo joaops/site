@@ -35,7 +35,7 @@
                                     <tr th:unless="${pessoa == null}">
                                         <td th:text="${pessoa.id}">Id</td>
                                         <td th:text="${pessoa.nome}">Nome</td>
-                                        <td th:text="${pessoa.nascimento}">Data de Nascimento</td>
+                                        <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
                                         <td>
                                             <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/alterar'}" th:text="'Alterar'">Alterar</a>
                                             <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/deletar'}" th:text="'Deletar'">Deletar</a>

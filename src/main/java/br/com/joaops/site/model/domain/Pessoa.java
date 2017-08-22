@@ -2,6 +2,7 @@ package br.com.joaops.site.model.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -34,17 +37,14 @@ public class Pessoa implements Serializable {
     @Column(name = "nome")
     private String nome;
     
+    @Temporal(TemporalType.DATE)
     @Column(name = "data_nascimento")
-    private LocalDate nascimento;
+    private Date nascimento;
     
     public Pessoa() {
-        this(0L, "", LocalDate.MIN);
-    }
-    
-    public Pessoa(Long id, String nome, LocalDate nascimento) {
-        this.id = id;
-        this.nome = nome;
-        this.nascimento = nascimento;
+        this.id = 0L;
+        this.nome = "";
+        this.nascimento = new Date();
     }
     
     public Long getId() {
@@ -62,12 +62,12 @@ public class Pessoa implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public LocalDate getNascimento() {
+    
+    public Date getNascimento() {
         return nascimento;
     }
-
-    public void setNascimento(LocalDate nascimento) {
+    
+    public void setNascimento(Date nascimento) {
         this.nascimento = nascimento;
     }
     
