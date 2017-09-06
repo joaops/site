@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
-        <title>Home</title>
+        <title>Painel</title>
         <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
@@ -16,10 +16,10 @@
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">HOME</h3>
+                            <h3 class="panel-title">Painel de Controle</h3>
                         </div>
                         <div class="panel-body">
-                            <p>Página Home</p>
+                            <a href="#" class="btn btn-default btn-sm" th:href="@{'/session/pessoa'}" th:text="'Pessoas'">Pessoas</a>
                         </div>
                     </div>
                 </div>

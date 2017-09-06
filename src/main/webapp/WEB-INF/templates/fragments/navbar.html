@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
         <title>NavBar</title>
-        <link rel="shortcut icon" href="../../resources/images/favicon2.ico" th:href="@{'/resources/images/favicon2.ico'}" />
+        <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
     <body>
@@ -29,7 +29,7 @@
                                 <li sec:authorize="hasAnyRole('ROLE_SYSTEM_USER_READ')"><a href="#" th:href="@{/system/user}" th:text="'Usuários'">Usuários</a></li>
                             </ul>
                         </li>
-                        <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{'/pessoa'}" th:text="'Pessoas'">Pessoas</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{'/session'}" th:text="'Sessão'">Sessão</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" sec:authorize="isAnonymous()">
                         <li>

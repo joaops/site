@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="João Paulo Siqueira">
+        <title>Sessões</title>
+        <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
+        <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
+    </head>
+    <body>
+        <nav th:replace="fragments/navbar :: navbar"></nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Sessão</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-condensed table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>SessionId</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${sessionId == null}">
+                                        <td colspan="2">Sessão Não Encontrada!</td>
+                                    </tr>
+                                    <tr th:unless="${sessionId == null}">
+                                        <td th:text="${sessionId}">Id da Sessão</td>
+                                        <td>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/ping'}" th:text="'Ping'">Ping</a>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/close'}" th:text="'Close'">Close</a>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/painel-controle'}" th:text="'Painel de Controle'">Painel de Controle</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
+        <script type="text/javascript" src="../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
+    </body>
+</html>
