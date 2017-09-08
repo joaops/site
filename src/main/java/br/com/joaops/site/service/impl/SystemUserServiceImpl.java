@@ -2,18 +2,12 @@ package br.com.joaops.site.service.impl;
 
 import br.com.joaops.site.dto.SystemUserDto;
 import br.com.joaops.site.dto.SystemUserPermissionDto;
-import br.com.joaops.site.model.dao.SystemModuleRepository;
-import br.com.joaops.site.model.dao.SystemUserPermissionRepository;
 import br.com.joaops.site.model.dao.SystemUserRepository;
-import br.com.joaops.site.model.domain.SystemModule;
 import br.com.joaops.site.model.domain.SystemUser;
-import br.com.joaops.site.model.domain.SystemUserPermission;
-import br.com.joaops.site.model.domain.SystemUserPermissionId;
 import br.com.joaops.site.service.SystemUserPermissionService;
 import br.com.joaops.site.service.SystemUserService;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import org.dozer.Mapper;
 import org.dozer.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +27,6 @@ public class SystemUserServiceImpl implements SystemUserService {
     
     @Autowired
     private SystemUserRepository userRepository;
-    
-    @Autowired
-    private SystemModuleRepository moduleRepository;
-    
-    @Autowired
-    private SystemUserPermissionRepository permissionRepository;
     
     @Autowired
     private SystemUserPermissionService permissionService;
@@ -156,84 +144,6 @@ public class SystemUserServiceImpl implements SystemUserService {
             page = new PageImpl<>(new ArrayList<SystemUserDto>(), p, 0);
         }
         return page;
-    }
-    
-    @PostConstruct
-    private void createUser() {
-        SystemModule systemModule = new SystemModule();
-        systemModule.setCategory("SYSTEM");
-        systemModule.setName("MODULE");
-        systemModule = moduleRepository.save(systemModule);
-        
-        SystemModule userModule = new SystemModule();
-        userModule.setCategory("SYSTEM");
-        userModule.setName("USER");
-        userModule = moduleRepository.save(userModule);
-        
-        SystemModule permissionModule = new SystemModule();
-        permissionModule.setCategory("SYSTEM");
-        permissionModule.setName("PERMISSION");
-        permissionModule = moduleRepository.save(permissionModule);
-        
-        SystemModule pessoaModule = new SystemModule();
-        pessoaModule.setCategory("SESSION");
-        pessoaModule.setName("PESSOA");
-        pessoaModule = moduleRepository.save(pessoaModule);
-        
-        SystemUser user = new SystemUser();
-        user.setFirstName("João Paulo");
-        user.setLastName("Siqueira");
-        user.setAccountCanExpire(Boolean.FALSE);
-        user.setCredentialCanExpire(Boolean.FALSE);
-        user.setEmail("joaopaulo1094@gmail.com");
-        user.setEnabled(Boolean.TRUE);
-        user.setLocked(Boolean.FALSE);
-        user.setPassword(encoder.encode("admin"));
-        user = userRepository.save(user);
-        
-        SystemUserPermission permission1 = new SystemUserPermission();
-        SystemUserPermissionId permissionId1 = new SystemUserPermissionId();
-        permissionId1.setSystemUser(user);
-        permissionId1.setSystemModule(pessoaModule);
-        permission1.setSystemUserPermissionId(permissionId1);
-        permission1.setAdd(Boolean.TRUE);
-        permission1.setDelete(Boolean.TRUE);
-        permission1.setEdit(Boolean.TRUE);
-        permission1.setRead(Boolean.TRUE);
-        permissionRepository.save(permission1);
-        
-        SystemUserPermission permission2 = new SystemUserPermission();
-        SystemUserPermissionId permissionId2 = new SystemUserPermissionId();
-        permissionId2.setSystemUser(user);
-        permissionId2.setSystemModule(userModule);
-        permission2.setSystemUserPermissionId(permissionId2);
-        permission2.setAdd(Boolean.TRUE);
-        permission2.setDelete(Boolean.TRUE);
-        permission2.setEdit(Boolean.TRUE);
-        permission2.setRead(Boolean.TRUE);
-        permissionRepository.save(permission2);
-        
-        SystemUserPermission permission3 = new SystemUserPermission();
-        SystemUserPermissionId permissionId3 = new SystemUserPermissionId();
-        permissionId3.setSystemUser(user);
-        permissionId3.setSystemModule(permissionModule);
-        permission3.setSystemUserPermissionId(permissionId3);
-        permission3.setAdd(Boolean.TRUE);
-        permission3.setDelete(Boolean.TRUE);
-        permission3.setEdit(Boolean.TRUE);
-        permission3.setRead(Boolean.TRUE);
-        permissionRepository.save(permission3);
-        
-        SystemUserPermission permission4 = new SystemUserPermission();
-        SystemUserPermissionId permissionId4 = new SystemUserPermissionId();
-        permissionId4.setSystemUser(user);
-        permissionId4.setSystemModule(pessoaModule);
-        permission4.setSystemUserPermissionId(permissionId4);
-        permission4.setAdd(Boolean.TRUE);
-        permission4.setDelete(Boolean.TRUE);
-        permission4.setEdit(Boolean.TRUE);
-        permission4.setRead(Boolean.TRUE);
-        permissionRepository.save(permission4);
     }
     
 }

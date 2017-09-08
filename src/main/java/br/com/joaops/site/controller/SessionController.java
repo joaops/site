@@ -7,9 +7,12 @@ package br.com.joaops.site.controller;
 
 import br.com.joaops.site.json.domain.PingJson;
 import br.com.joaops.site.json.repository.SessionRepository;
+import br.com.joaops.site.util.CONSTANTES;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +32,7 @@ public class SessionController {
     @Autowired
     private SimpMessagingTemplate simp;
     
-    @RequestMapping(value = "session", method = RequestMethod.GET)
+    @RequestMapping(value = "/session", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("session/index");
         String email = request.getRemoteUser();
@@ -38,21 +41,20 @@ public class SessionController {
         return mav;
     }
     
-    @RequestMapping(value = "session/ping", method = RequestMethod.GET)
+    @RequestMapping(value = "/session/ping", method = RequestMethod.GET)
     public ModelAndView ping(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("redirect:/session");
-        simp.convertAndSend("/topic/ping", new PingJson("Ping"));
+        String email = request.getRemoteUser();
+        String sessionId = sessionRepository.getSessionIdByName(email);
+        PingJson ping = new PingJson("Ping Para a Sessão " + sessionId);
+        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setLeaveMutable(true);
+        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.PING, ping, headerAccessor.getMessageHeaders());
         return mav;
     }
     
-    @RequestMapping(value = "session/close", method = RequestMethod.GET)
-    public ModelAndView close(HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView mav = new ModelAndView("redirect:/session");
-        simp.convertAndSend("/topic/ping", new PingJson("Ping"));
-        return mav;
-    }
-    
-    @RequestMapping(value = "session/painel-controle", method = RequestMethod.GET)
+    @RequestMapping(value = "/session/painel-controle", method = RequestMethod.GET)
     public ModelAndView painel(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView mav = new ModelAndView("session/painel");
         String email = request.getRemoteUser();

@@ -20,7 +20,12 @@ public interface CONSTANTES {
         public static String DELETAR_PESSOA = "deletarPessoa";
     }
     
+    interface TOPICS {
+        public static String PING = "/topic/ping";
+    }
+    
     interface QUEUES {
+        public static String PING = "/queue/ping";
         public static String PESSOA = "/queue/PessoaRequest";
     }
     

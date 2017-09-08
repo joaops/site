@@ -31,7 +31,7 @@ public class PersistenceConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        // dataSource.setUrl("jdbc:postgresql://localhost:5432/site");
+        //dataSource.setUrl("jdbc:postgresql://localhost:5432/site");
         dataSource.setUrl("jdbc:postgresql://172.30.236.137:5432/site");
         dataSource.setUsername("userRCL");
         dataSource.setPassword("00nw357lYyQ32W7d");
@@ -44,7 +44,7 @@ public class PersistenceConfig {
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.hbm2ddl.auto", "create-drop"); // trocar por validate na implantação.
-        // properties.setProperty("hibernate.hbm2ddl.import_files", importFiles()); // Estou Adicionando Pelo @PostContruct na Classe SystemUserServiceImpl
+        properties.setProperty("hibernate.hbm2ddl.import_files", importFiles());
         return properties;
     }
     
