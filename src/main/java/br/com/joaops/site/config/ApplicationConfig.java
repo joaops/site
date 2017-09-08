@@ -15,8 +15,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan(basePackages={"br.com.joaops.site"}, 
         excludeFilters=@ComponentScan.Filter(
-                type=FilterType.REGEX, 
-                pattern={"br.com.joaops.site.controller.*"}))
+                type=FilterType.REGEX,
+                pattern={
+                    "br.com.joaops.site.controller.*",
+                    "com.mycompany.app.model.*"
+                }
+        )
+)
 public class ApplicationConfig {
     
 }

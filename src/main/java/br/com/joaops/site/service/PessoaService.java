@@ -8,8 +8,6 @@ package br.com.joaops.site.service;
 import br.com.joaops.site.dto.PessoaDto;
 import br.com.joaops.site.json.response.PessoaResponse;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  *
@@ -21,14 +19,14 @@ public interface PessoaService {
     
     public PessoaDto newDto();
 
-    public String save(String sesssionId, PessoaDto pessoaDto);
+    public String save(String sessionId, PessoaDto pessoaDto);
     
-    public PessoaDto findOne(String sesssionId, Long id);
+    public PessoaDto findOne(String sessionId, Long id);
     
-    public String update(String sesssionId, PessoaDto pessoaDto);
+    public String update(String sessionId, PessoaDto pessoaDto);
 
-    public String delete(String sesssionId, PessoaDto pessoa);
+    public String delete(String sessionId, PessoaDto pessoa);
     
-    public List<PessoaDto> findAll(String sesssionId);
+    public List<PessoaDto> findAll(String sessionId);
     
 }

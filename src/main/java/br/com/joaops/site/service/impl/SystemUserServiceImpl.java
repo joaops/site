@@ -175,6 +175,11 @@ public class SystemUserServiceImpl implements SystemUserService {
         permissionModule.setName("PERMISSION");
         permissionModule = moduleRepository.save(permissionModule);
         
+        SystemModule pessoaModule = new SystemModule();
+        pessoaModule.setCategory("SESSION");
+        pessoaModule.setName("PESSOA");
+        pessoaModule = moduleRepository.save(pessoaModule);
+        
         SystemUser user = new SystemUser();
         user.setFirstName("João Paulo");
         user.setLastName("Siqueira");
@@ -189,7 +194,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         SystemUserPermission permission1 = new SystemUserPermission();
         SystemUserPermissionId permissionId1 = new SystemUserPermissionId();
         permissionId1.setSystemUser(user);
-        permissionId1.setSystemModule(systemModule);
+        permissionId1.setSystemModule(pessoaModule);
         permission1.setSystemUserPermissionId(permissionId1);
         permission1.setAdd(Boolean.TRUE);
         permission1.setDelete(Boolean.TRUE);
@@ -219,6 +224,16 @@ public class SystemUserServiceImpl implements SystemUserService {
         permission3.setRead(Boolean.TRUE);
         permissionRepository.save(permission3);
         
+        SystemUserPermission permission4 = new SystemUserPermission();
+        SystemUserPermissionId permissionId4 = new SystemUserPermissionId();
+        permissionId4.setSystemUser(user);
+        permissionId4.setSystemModule(pessoaModule);
+        permission4.setSystemUserPermissionId(permissionId4);
+        permission4.setAdd(Boolean.TRUE);
+        permission4.setDelete(Boolean.TRUE);
+        permission4.setEdit(Boolean.TRUE);
+        permission4.setRead(Boolean.TRUE);
+        permissionRepository.save(permission4);
     }
     
 }

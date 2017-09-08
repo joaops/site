@@ -40,14 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/pessoa").authenticated()
-                .antMatchers("/pessoa/cadastrar").authenticated()
-                .antMatchers("/pessoa/salvar").authenticated()
-                .antMatchers("/pessoa/*/mostrar").authenticated()
-                .antMatchers("/pessoa/*/alterar").authenticated()
-                .antMatchers("/pessoa/*/deletar").authenticated()
-                .antMatchers("/pessoa/deletar").authenticated()
+                .antMatchers("/").authenticated()
                 .antMatchers("/system/user").hasRole("SYSTEM_USER_READ")
                 .antMatchers("/system/user/show/*").hasRole("SYSTEM_USER_READ")
                 .antMatchers("/system/user/add").hasRole("SYSTEM_USER_ADD")
@@ -55,14 +48,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/system/user/edit/*").hasRole("SYSTEM_USER_EDIT")
                 .antMatchers("/system/user/update").hasRole("SYSTEM_USER_EDIT")
                 .antMatchers("/system/user/delete/*").hasRole("SYSTEM_USER_DELETE")
-                //.antMatchers("/session/funcionario").hasRole("SESSION_FUNCIONARIO_READ")
-                //.antMatchers("/session/funcionario/cadastrar").hasRole("SESSION_FUNCIONARIO_ADD")
-                //.antMatchers("/session/funcionario/salvar").hasRole("SESSION_FUNCIONARIO_ADD")
-                //.antMatchers("/session/funcionario/*/mostrar").hasRole("SESSION_FUNCIONARIO_READ")
-                //.antMatchers("/session/funcionario/*/alterar").hasRole("SESSION_FUNCIONARIO_EDIT")
-                //.antMatchers("/session/funcionario/atualizar").hasRole("SESSION_FUNCIONARIO_EDIT")
-                //.antMatchers("/session/funcionario/*/deletar").hasRole("SESSION_FUNCIONARIO_DELETE")
-                //.antMatchers("/session/funcionario/*/excluir").hasRole("SESSION_FUNCIONARIO_DELETE")
+                .antMatchers("/session/pessoa").hasRole("SESSION_PESSOA_READ")
+                .antMatchers("/session/pessoa/cadastrar").hasRole("SESSION_PESSOA_ADD")
+                .antMatchers("/session/pessoa/salvar").hasRole("SESSION_PESSOA_ADD")
+                .antMatchers("/session/pessoa/*/mostrar").hasRole("SESSION_PESSOA_READ")
+                .antMatchers("/session/pessoa/*/alterar").hasRole("SESSION_PESSOA_EDIT")
+                .antMatchers("/session/pessoa/*/deletar").hasRole("SESSION_PESSOA_DELETE")
+                .antMatchers("/session/pessoa/deletar").hasRole("SESSION_PESSOA_DELETE")
                 .anyRequest().authenticated();
         
         //configuração adicional para a autenticação do cliente websocket

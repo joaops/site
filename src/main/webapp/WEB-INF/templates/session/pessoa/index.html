@@ -19,7 +19,7 @@
                             <h3 class="panel-title">Pessoas</h3>
                         </div>
                         <div class="panel-body">
-                            <a class="btn btn-default btn-xs" href="#" th:href="@{'/pessoa/cadastrar'}">Cadastrar</a>
+                            <a class="btn btn-default btn-sm" href="#" th:href="@{'/session/pessoa/cadastrar'}">Cadastrar</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-hover table-striped">
@@ -32,17 +32,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:if="${#lists.isEmpty(page.content)}">
+                                    <tr th:if="${#lists.isEmpty(pessoas)}">
                                         <td colspan="4">Nenhuma Pessoa Cadastrada.</td>
                                     </tr>
-                                    <tr th:unless="${#lists.isEmpty(page.content)}" th:each="pessoa : ${page.content}">
+                                    <tr th:unless="${#lists.isEmpty(pessoas)}" th:each="pessoa : ${pessoas}">
                                         <td th:text="${pessoa.id}">Id</td>
                                         <td th:text="${pessoa.nome}">Nome</td>
                                         <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
                                         <td>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/pessoa/'+${pessoa.id}+'/mostrar'}">Mostrar</a>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/pessoa/'+${pessoa.id}+'/alterar'}">Alterar</a>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/pessoa/'+${pessoa.id}+'/deletar'}">Deletar</a>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/mostrar'}">Mostrar</a>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/alterar'}">Alterar</a>
+                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/deletar'}">Deletar</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -52,7 +52,6 @@
                 </div>
             </div>
         </div>
-        <nav th:replace="fragments/pagination :: pagination"></nav>
         <script type="text/javascript" src="../../resources/js/jquery-3.1.1.min.js" th:src="@{'/resources/js/jquery-3.1.1.min.js'}"></script>
         <script type="text/javascript" src="../../resources/js/bootstrap.min.js" th:src="@{'/resources/js/bootstrap.min.js'}"></script>
     </body>

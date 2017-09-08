@@ -5,6 +5,7 @@
  */
 package br.com.joaops.site.controller;
 
+import br.com.joaops.site.json.domain.PingJson;
 import br.com.joaops.site.json.repository.SessionRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,20 @@ public class SessionController {
         String email = request.getRemoteUser();
         String sessionId = sessionRepository.getSessionIdByName(email);
         mav.addObject("sessionId", sessionId);
+        return mav;
+    }
+    
+    @RequestMapping(value = "session/ping", method = RequestMethod.GET)
+    public ModelAndView ping(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView mav = new ModelAndView("redirect:/session");
+        simp.convertAndSend("/topic/ping", new PingJson("Ping"));
+        return mav;
+    }
+    
+    @RequestMapping(value = "session/close", method = RequestMethod.GET)
+    public ModelAndView close(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView mav = new ModelAndView("redirect:/session");
+        simp.convertAndSend("/topic/ping", new PingJson("Ping"));
         return mav;
     }
     
