@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
         <title>Pessoa</title>
-        <link rel="shortcut icon" href="../../resources/images/favicon2.ico" th:href="@{'/resources/images/favicon2.ico'}" />
+        <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
     <body>
@@ -14,9 +14,20 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
+                    <div th:unless="${erro == null}" class="alert alert-danger fade in">
+                        <h4>ERRO</h4>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:text="${erro}">ERRO</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Cadastrar Uma Nova Pessoa</h3>
+                            <h3 class="panel-title">
+                                <span th:if="${tituloPanel != null}" th:text="${tituloPanel}">Cadastrar</span>
+                            </h3>
                         </div>
                         <div class="panel-body">
                             <form class="form-horizontal" action="#" method="POST" th:action="@{'/pessoa/salvar'}" th:method="POST" th:object="${pessoa}">
@@ -25,12 +36,18 @@
                                     <label class="col-sm-2 col-xs-3 control-label" for="inputNome" th:text="'Nome'">Nome</label>
                                     <div class="col-sm-10 col-xs-9">
                                         <input class="form-control" id="inputNome" type="text" th:value="*{nome}" th:field="*{nome}" />
+                                        <h4>
+                                            <span class="label label-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">Erro</span>
+                                        </h4>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 col-xs-3 control-label" for="inputNascimento" th:text="'Data de Nascimento'">Data de Nascimento</label>
                                     <div class="col-sm-10 col-xs-9">
                                         <input class="form-control" id="inputNascimento" type="date" th:value="*{nascimento}" th:field="*{nascimento}" />
+                                        <h4>
+                                            <span class="label label-danger" th:if="${#fields.hasErrors('nascimento')}" th:errors="*{nascimento}">Erro</span>
+                                        </h4>
                                     </div>
                                 </div>
                                 <div class="row">

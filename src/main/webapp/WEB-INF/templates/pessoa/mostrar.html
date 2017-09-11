@@ -5,8 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
-        <title>Pessoas</title>
-        <link rel="shortcut icon" href="../../resources/images/favicon2.ico" th:href="@{'/resources/images/favicon2.ico'}" />
+        <title>Dados da Pessoa</title>
+        <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
     <body>
@@ -14,12 +14,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
+                    <div th:unless="${erro == null}" class="alert alert-danger fade in">
+                        <h4>ERRO</h4>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:text="${erro}">ERRO</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Pessoas</h3>
-                        </div>
-                        <div class="panel-body">
-                            <a class="btn btn-default btn-sm" href="#" th:href="@{'/session/pessoa/cadastrar'}">Cadastrar</a>
+                            <h3 class="panel-title">Dados da Pessoa</h3>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-hover table-striped">
@@ -32,17 +38,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:if="${#lists.isEmpty(pessoas)}">
-                                        <td colspan="4">Nenhuma Pessoa Cadastrada.</td>
+                                    <tr th:if="${pessoa == null}">
+                                        <td colspan="4">Pessoa Não Encontrada!</td>
                                     </tr>
-                                    <tr th:unless="${#lists.isEmpty(pessoas)}" th:each="pessoa : ${pessoas}">
+                                    <tr th:unless="${pessoa == null}">
                                         <td th:text="${pessoa.id}">Id</td>
                                         <td th:text="${pessoa.nome}">Nome</td>
                                         <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
                                         <td>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/mostrar'}">Mostrar</a>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/alterar'}">Alterar</a>
-                                            <a class="btn btn-xs btn-default" href="#" th:href="@{'/session/pessoa/'+${pessoa.id}+'/deletar'}">Deletar</a>
+                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/alterar'}" th:text="'Alterar'">Alterar</a>
+                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/deletar'}" th:text="'Deletar'">Deletar</a>
+                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa'}" th:text="'Voltar'">Voltar</a>
                                         </td>
                                     </tr>
                                 </tbody>

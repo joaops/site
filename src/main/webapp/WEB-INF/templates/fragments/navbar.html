@@ -29,7 +29,8 @@
                                 <li sec:authorize="hasAnyRole('ROLE_SYSTEM_USER_READ')"><a href="#" th:href="@{/system/user}" th:text="'Usuários'">Usuários</a></li>
                             </ul>
                         </li>
-                        <li sec:authorize="isAuthenticated()"><a href="#" th:href="@{'/session'}" th:text="'Sessão'">Sessão</a></li>
+                        <li sec:authorize="hasAnyRole('ROLE_SESSION_SESSION_READ')"><a href="#" th:href="@{'/session'}" th:text="'Sessão'">Sessão</a></li>
+                        <li sec:authorize="hasAnyRole('ROLE_SESSION_PESSOA_READ')"><a href="#" th:href="@{'/pessoa'}" th:text="'Pessoa'">Pessoa</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" sec:authorize="isAnonymous()">
                         <li>

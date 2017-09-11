@@ -1,9 +1,12 @@
 package br.com.joaops.site.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,7 +17,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PessoaDto implements Serializable {
     
     private Long id;
+    
+    @NotEmpty
+    @Length(max = 255)
     private String nome;
+    
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date nascimento;
     

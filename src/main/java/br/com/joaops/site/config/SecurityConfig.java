@@ -48,13 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/system/user/edit/*").hasRole("SYSTEM_USER_EDIT")
                 .antMatchers("/system/user/update").hasRole("SYSTEM_USER_EDIT")
                 .antMatchers("/system/user/delete/*").hasRole("SYSTEM_USER_DELETE")
-                .antMatchers("/session/pessoa").hasRole("SESSION_PESSOA_READ")
-                .antMatchers("/session/pessoa/cadastrar").hasRole("SESSION_PESSOA_ADD")
-                .antMatchers("/session/pessoa/salvar").hasRole("SESSION_PESSOA_ADD")
-                .antMatchers("/session/pessoa/*/mostrar").hasRole("SESSION_PESSOA_READ")
-                .antMatchers("/session/pessoa/*/alterar").hasRole("SESSION_PESSOA_EDIT")
-                .antMatchers("/session/pessoa/*/deletar").hasRole("SESSION_PESSOA_DELETE")
-                .antMatchers("/session/pessoa/deletar").hasRole("SESSION_PESSOA_DELETE")
+                .antMatchers("/pessoa").hasRole("SESSION_PESSOA_READ")
+                .antMatchers("/pessoa/cadastrar").hasRole("SESSION_PESSOA_ADD")
+                .antMatchers("/pessoa/salvar").hasRole("SESSION_PESSOA_ADD")
+                .antMatchers("/pessoa/*/mostrar").hasRole("SESSION_PESSOA_READ")
+                .antMatchers("/pessoa/*/alterar").hasRole("SESSION_PESSOA_EDIT")
+                .antMatchers("/pessoa/*/deletar").hasRole("SESSION_PESSOA_DELETE")
+                .antMatchers("/pessoa/deletar").hasRole("SESSION_PESSOA_DELETE")
+                .antMatchers("/session").hasRole("SESSION_SESSION_READ")
+                .antMatchers("/session/painel-controle").hasRole("SESSION_PESSOA_READ")
+                .antMatchers("/session/ping").hasRole("SESSION_PESSOA_READ")
                 .anyRequest().authenticated();
         
         //configuração adicional para a autenticação do cliente websocket

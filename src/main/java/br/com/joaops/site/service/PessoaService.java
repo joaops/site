@@ -7,6 +7,7 @@ package br.com.joaops.site.service;
 
 import br.com.joaops.site.dto.PessoaDto;
 import br.com.joaops.site.json.response.PessoaResponse;
+
 import java.util.List;
 
 /**
@@ -18,15 +19,13 @@ public interface PessoaService {
     public void salvarPessoaResponse(PessoaResponse pessoaResponse);
     
     public PessoaDto newDto();
-
-    public String save(String sessionId, PessoaDto pessoaDto);
     
-    public PessoaDto findOne(String sessionId, Long id);
+    public PessoaDto save(PessoaDto pessoaDto) throws Exception;
     
-    public String update(String sessionId, PessoaDto pessoaDto);
-
-    public String delete(String sessionId, PessoaDto pessoa);
+    public PessoaDto findOne(Long id) throws Exception;
     
-    public List<PessoaDto> findAll(String sessionId);
+    public void delete(PessoaDto pessoaDto) throws Exception;
+    
+    public List<PessoaDto> findAll() throws Exception;
     
 }

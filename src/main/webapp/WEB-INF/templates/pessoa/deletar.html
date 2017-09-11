@@ -5,8 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="João Paulo Siqueira">
-        <title>Dados da Pessoa</title>
-        <link rel="shortcut icon" href="../../resources/images/favicon2.ico" th:href="@{'/resources/images/favicon2.ico'}" />
+        <title>Deletar Dados da Pessoa</title>
+        <link rel="shortcut icon" href="../../resources/images/favicon.ico" th:href="@{'/resources/images/favicon.ico'}" />
         <link type="text/css" rel="stylesheet" href="../../resources/css/bootstrap.min.css" th:href="@{'/resources/css/bootstrap.min.css'}"/>
     </head>
     <body>
@@ -14,9 +14,18 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
+                    <div th:unless="${erro == null}" class="alert alert-danger fade in">
+                        <h4>ERRO</h4>
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:text="${erro}">ERRO</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Dados da Pessoa</h3>
+                            <h3 class="panel-title">Deletar Dados da Pessoa</h3>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-condensed table-hover table-striped">
@@ -37,9 +46,13 @@
                                         <td th:text="${pessoa.nome}">Nome</td>
                                         <td th:text="${#dates.format(pessoa.nascimento, 'dd/MM/yyyy')}">Data de Nascimento</td>
                                         <td>
-                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/alterar'}" th:text="'Alterar'">Alterar</a>
-                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa/' + ${pessoa.id} + '/deletar'}" th:text="'Deletar'">Deletar</a>
-                                            <a href="#" class="btn btn-xs btn-default btn-sm" th:href="@{'/pessoa'}" th:text="'Voltar'">Voltar</a>
+                                            <form action="#" method="POST" th:action="@{'/pessoa/deletar'}" th:method="POST" th:object="${pessoa}">
+                                                <input hidden="hidden" type="number" th:value="*{id}" th:field="*{id}" />
+                                                <input hidden="hidden" type="text" th:value="*{nome}" th:field="*{nome}" />
+                                                <input hidden="hidden" type="time" th:value="*{nascimento}" th:field="*{nascimento}" />
+                                                <button class="btn btn-xs btn-danger" type="submit" value="submit">Deletar</button>
+                                                <a class="btn btn-xs btn-default" href="#" th:href="@{'/pessoa'}" th:text="'Cancelar'">Cancelar</a>
+                                            </form>
                                         </td>
                                     </tr>
                                 </tbody>
