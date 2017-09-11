@@ -13,8 +13,8 @@ public class GeradorId {
     
     private static Long ID = 1l;
     
-    public static String getNextId() {
-        return String.valueOf(ID++);
+    public static Long getNextId() {
+        return ID++;
     }
     
 }

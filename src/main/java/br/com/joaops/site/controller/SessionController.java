@@ -6,11 +6,14 @@
 package br.com.joaops.site.controller;
 
 import br.com.joaops.site.json.domain.PingJson;
+import br.com.joaops.site.json.protocol.Message;
+import br.com.joaops.site.json.repository.MessageRepository;
 import br.com.joaops.site.json.repository.SessionRepository;
 import br.com.joaops.site.util.CONSTANTES;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,7 +33,15 @@ public class SessionController {
     private SessionRepository sessionRepository;
     
     @Autowired
+    private MessageRepository messageRepository;
+    
+    @Autowired
     private SimpMessagingTemplate simp;
+    
+    @MessageMapping(CONSTANTES.ENDPOINTS.MESSAGE)
+    public void message(Message message) {
+        messageRepository.save(message);
+    }
     
     @RequestMapping(value = "/session", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {

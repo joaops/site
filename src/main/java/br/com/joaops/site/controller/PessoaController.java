@@ -1,16 +1,13 @@
 package br.com.joaops.site.controller;
 
 import br.com.joaops.site.dto.PessoaDto;
-import br.com.joaops.site.json.response.PessoaResponse;
 import br.com.joaops.site.service.PessoaService;
-import br.com.joaops.site.util.CONSTANTES;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,11 +25,6 @@ public class PessoaController {
     
     @Autowired
     private PessoaService pessoaService;
-    
-    @MessageMapping(CONSTANTES.ENDPOINTS.PESSOA)
-    public void funcionarioResponse(PessoaResponse response) {
-        pessoaService.salvarPessoaResponse(response);
-    }
     
     @RequestMapping(value = "/pessoa", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
@@ -120,7 +112,7 @@ public class PessoaController {
     public ModelAndView deletar(HttpServletRequest request, HttpServletResponse response, PessoaDto pessoa) {
         ModelAndView mav;
         try {
-            pessoaService.delete(pessoa);
+            pessoaService.delete(pessoa.getId());
             mav = new ModelAndView("redirect:/pessoa");
         } catch (Exception e) {
             mav = new ModelAndView("/pessoa/deletar");

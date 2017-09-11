@@ -5,7 +5,7 @@
  */
 package br.com.joaops.site.json.repository;
 
-import br.com.joaops.site.json.response.PessoaResponse;
+import br.com.joaops.site.json.protocol.Message;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,27 +17,27 @@ import org.springframework.stereotype.Repository;
  * @author João Paulo Siqueira <joaopaulo1094@gmail.com>
  */
 @Repository
-public class PessoaResponseRepository {
+public class MessageRepository {
     
-    private static final Map<String, PessoaResponse> MAP = new HashMap<>();
+    private static final Map<Long, Message> MAP = new HashMap<>();
     
-    public void save(PessoaResponse response) {
-        MAP.put(response.getId(), response);
+    public void save(Message message) {
+        MAP.put(message.getId(), message);
     }
     
-    public boolean exist(String id) {
+    public boolean exist(Long id) {
         return MAP.containsKey(id);
     }
     
-    public PessoaResponse findOne(String id) {
+    public Message findOne(Long id) {
         return MAP.get(id);
     }
     
-    public List<PessoaResponse> findAll() {
+    public List<Message> findAll() {
         return new ArrayList<>(MAP.values());
     }
     
-    public void remove(String id) {
+    public void remove(Long id) {
         MAP.remove(id);
     }
     

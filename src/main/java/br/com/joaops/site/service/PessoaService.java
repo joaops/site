@@ -6,7 +6,6 @@
 package br.com.joaops.site.service;
 
 import br.com.joaops.site.dto.PessoaDto;
-import br.com.joaops.site.json.response.PessoaResponse;
 
 import java.util.List;
 
@@ -16,15 +15,13 @@ import java.util.List;
  */
 public interface PessoaService {
     
-    public void salvarPessoaResponse(PessoaResponse pessoaResponse);
-    
     public PessoaDto newDto();
     
     public PessoaDto save(PessoaDto pessoaDto) throws Exception;
     
     public PessoaDto findOne(Long id) throws Exception;
     
-    public void delete(PessoaDto pessoaDto) throws Exception;
+    public void delete(Long id) throws Exception;
     
     public List<PessoaDto> findAll() throws Exception;
     

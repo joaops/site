@@ -2,18 +2,20 @@ package br.com.joaops.site.service.impl;
 
 import br.com.joaops.site.dto.PessoaDto;
 import br.com.joaops.site.json.domain.PessoaJson;
-import br.com.joaops.site.json.repository.PessoaResponseRepository;
+import br.com.joaops.site.json.protocol.Message;
+import br.com.joaops.site.json.protocol.Status;
+import br.com.joaops.site.json.repository.MessageRepository;
 import br.com.joaops.site.json.repository.SessionRepository;
-import br.com.joaops.site.json.request.PessoaRequest;
-import br.com.joaops.site.json.response.PessoaResponse;
 import br.com.joaops.site.service.PessoaService;
 import br.com.joaops.site.util.CONSTANTES;
 import br.com.joaops.site.util.GeradorId;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import org.dozer.Mapper;
@@ -45,12 +47,7 @@ public class PessoaServiceImpl implements PessoaService {
     private SessionRepository sessionRepository;
     
     @Autowired
-    private PessoaResponseRepository pessoaResponseRepository;
-    
-    @Override
-    public void salvarPessoaResponse(PessoaResponse pessoaResponse) {
-        pessoaResponseRepository.save(pessoaResponse);
-    }
+    private MessageRepository messageRepository;
     
     @Override
     public PessoaDto newDto() {
@@ -60,21 +57,19 @@ public class PessoaServiceImpl implements PessoaService {
     @Override
     public PessoaDto save(PessoaDto pessoaDto) throws Exception {
         String sessionId = getSessionId();
-        PessoaRequest request = new PessoaRequest();
+        Message request = new Message();
         request.setId(GeradorId.getNextId());
         request.setOperacao(CONSTANTES.COMANDOS.SALVAR_PESSOA);
-        List<PessoaJson> aux = new ArrayList<>();
         PessoaJson json = new PessoaJson();
         mapper.map(pessoaDto, json);
-        aux.add(json);
-        request.setPessoas(aux);
+        request.setParam("pessoa", json);
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
-        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.PESSOA, request, headerAccessor.getMessageHeaders());
+        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.MESSAGE, request, headerAccessor.getMessageHeaders());
         int cont = 0;
-        while (!pessoaResponseRepository.exist(request.getId())) {
-            if (cont >= 600) { // 600 = 1 minuto, 6000 = 10 minutos
+        while (!messageRepository.exist(request.getId())) {
+            if (cont >= 600) { // 1 minuto para o TimeOut
                 throw new TimeoutException("Limite de Tempo Excedido.");
             }
             if (!sessionRepository.containsValue(sessionId)) {
@@ -85,16 +80,23 @@ public class PessoaServiceImpl implements PessoaService {
                 Thread.sleep(100);
             } catch (InterruptedException ie) {}
         }
-        PessoaResponse response = pessoaResponseRepository.findOne(request.getId());
+        Message response = messageRepository.findOne(request.getId());
         PessoaDto dto = null;
         if (response != null) {
-            List<PessoaJson> pessoasJson = response.getPessoas();
-            if (pessoasJson.size() > 0) {
+            messageRepository.remove(request.getId());
+            if (response.getStatus() == Status.OK) {
+                if (!response.containsParam("pessoa")) {
+                    throw new UnsupportedOperationException("A Resposta Não Contém o Parâmetro da Consulta: " + "pessoa");
+                }
+                PessoaJson pessoaJson = new ObjectMapper().convertValue(response.getParam("pessoa"), PessoaJson.class);
                 dto = new PessoaDto();
-                PessoaJson pessoaJson = pessoasJson.get(0);
                 mapper.map(pessoaJson, dto);
+            } else {
+                if (response.getStatus() == Status.ERRO) {
+                    throw new UnsupportedOperationException("A Consulta Retornou Com ERRO: " + response.getParam("erro"));
+                }
+                throw new UnsupportedOperationException("O Status da Resposta é Inválido: " + response.getStatus().name());
             }
-            pessoaResponseRepository.remove(request.getId());
         } else {
             throw new UnsupportedOperationException("Operação Sem Resposta.");
         }
@@ -104,21 +106,17 @@ public class PessoaServiceImpl implements PessoaService {
     @Override
     public PessoaDto findOne(Long id) throws Exception {
         String sessionId = getSessionId();
-        PessoaRequest request = new PessoaRequest();
+        Message request = new Message();
         request.setId(GeradorId.getNextId());
         request.setOperacao(CONSTANTES.COMANDOS.CONSULTAR_PESSOA_ID);
-        List<PessoaJson> aux = new ArrayList<>();
-        PessoaJson aux2 = new PessoaJson();
-        aux2.setId(id);
-        aux.add(aux2);
-        request.setPessoas(aux);
+        request.setParam("id", id);
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
-        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.PESSOA, request, headerAccessor.getMessageHeaders());
+        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.MESSAGE, request, headerAccessor.getMessageHeaders());
         int cont = 0;
-        while (!pessoaResponseRepository.exist(request.getId())) {
-            if (cont >= 600) {
+        while (!messageRepository.exist(request.getId())) {
+            if (cont >= 600) { // 1 minuto para o TimeOut
                 throw new TimeoutException("Limite de Tempo Excedido.");
             }
             if (!sessionRepository.containsValue(sessionId)) {
@@ -129,16 +127,24 @@ public class PessoaServiceImpl implements PessoaService {
                 Thread.sleep(100);
             } catch (InterruptedException ie) {}
         }
-        PessoaResponse response = pessoaResponseRepository.findOne(request.getId());
+        Message response = messageRepository.findOne(request.getId());
         PessoaDto pessoaDto = null;
         if (response != null) {
-            List<PessoaJson> pessoasJson = response.getPessoas();
-            if (pessoasJson.size() > 0) {
+            messageRepository.remove(request.getId());
+            if (response.getStatus() == Status.OK) {
+                if (!response.containsParam("pessoa")) {
+                    throw new UnsupportedOperationException("A Resposta Não Contém o Parâmetro da Consulta: " + "pessoa");
+                }
+                // Fazer Assim Para Converter Tipos Complexos
+                PessoaJson pessoaJson = new ObjectMapper().convertValue(response.getParam("pessoa"), PessoaJson.class);
                 pessoaDto = new PessoaDto();
-                PessoaJson pessoaJson = pessoasJson.get(0);
                 mapper.map(pessoaJson, pessoaDto);
+            } else {
+                if (response.getStatus() == Status.ERRO) {
+                    throw new UnsupportedOperationException("A Consulta Retornou Com ERRO: " + response.getParam("erro"));
+                }
+                throw new UnsupportedOperationException("O Status da Resposta é Inválido: " + response.getStatus().name());
             }
-            pessoaResponseRepository.remove(request.getId());
         } else {
             throw new UnsupportedOperationException("Operação Sem Resposta.");
         }
@@ -146,33 +152,19 @@ public class PessoaServiceImpl implements PessoaService {
     }
     
     @Override
-    public void delete(PessoaDto pessoaDto) throws Exception {
+    public void delete(Long id) throws Exception {
         String sessionId = getSessionId();
-        PessoaRequest request = new PessoaRequest();
+        Message request = new Message();
         request.setId(GeradorId.getNextId());
         request.setOperacao(CONSTANTES.COMANDOS.DELETAR_PESSOA);
-        PessoaJson pessoaJson = new PessoaJson();
-        mapper.map(pessoaDto, pessoaJson);
-        request.setPessoas(Arrays.asList(pessoaJson));
+        request.setParam("id", id);
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
-        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.PESSOA, request, headerAccessor.getMessageHeaders());
-    }
-    
-    @Override
-    public List<PessoaDto> findAll() throws Exception {
-        String sessionId = getSessionId();
-        PessoaRequest request = new PessoaRequest();
-        request.setId(GeradorId.getNextId());
-        request.setOperacao(CONSTANTES.COMANDOS.CONSULTAR_PESSOAS);
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.PESSOA, request, headerAccessor.getMessageHeaders());
+        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.MESSAGE, request, headerAccessor.getMessageHeaders());
         int cont = 0;
-        while (!pessoaResponseRepository.exist(request.getId())) {
-            if (cont >= 6000) {
+        while (!messageRepository.exist(request.getId())) {
+            if (cont >= 600) { // 1 minuto para o TimeOut
                 throw new TimeoutException("Limite de Tempo Excedido.");
             }
             if (!sessionRepository.containsValue(sessionId)) {
@@ -183,20 +175,90 @@ public class PessoaServiceImpl implements PessoaService {
                 Thread.sleep(100);
             } catch (InterruptedException ie) {}
         }
-        PessoaResponse response = pessoaResponseRepository.findOne(request.getId());
-        List<PessoaDto> pessoasDto = new ArrayList<>();
+        Message response = messageRepository.findOne(request.getId());
         if (response != null) {
-            List<PessoaJson> pessoasJson = response.getPessoas();
-            PessoaDto pessoaDto;
-            for (PessoaJson pessoaJson : pessoasJson) {
-                pessoaDto = new PessoaDto();
-                mapper.map(pessoaJson, pessoaDto);
-                pessoasDto.add(pessoaDto);
+            messageRepository.remove(request.getId());
+            if (response.getStatus() != Status.OK) {
+                throw new UnsupportedOperationException("A Operação Retornou Com ERRO: " + response.getParam("erro"));
             }
-            pessoaResponseRepository.remove(request.getId());
         } else {
             throw new UnsupportedOperationException("Operação Sem Resposta.");
         }
+    }
+    
+    @Override
+    public List<PessoaDto> findAll() throws Exception {
+        // Pego o SessionId do Usuário Logado
+        String sessionId = getSessionId();
+        // Crio a Mensagem de Consulta
+        Message request = new Message();
+        // Seto Um Id único para a mensagem
+        request.setId(GeradorId.getNextId());
+        // Seto o Comando
+        request.setOperacao(CONSTANTES.COMANDOS.CONSULTAR_PESSOAS);
+        // Essa Consulta não Possui Parâmetros
+        // Crio o Cabeçalho
+        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setLeaveMutable(true);
+        // Envio o Objeto de Consulta
+        simp.convertAndSendToUser(sessionId, CONSTANTES.QUEUES.MESSAGE, request, headerAccessor.getMessageHeaders());
+        // Aguardo a Resposta
+        int cont = 0;
+        while (!messageRepository.exist(request.getId())) {
+            // Verifico o TimeOut
+            if (cont >= 3000) {
+                throw new TimeoutException("Limite de Tempo Excedido.");
+            }
+            // Verifico se a Sessão está Conectada
+            if (!sessionRepository.containsValue(sessionId)) {
+                throw new SessionAuthenticationException("Sessão Não Conectada.");
+            }
+            // Aguardo um Tempo
+            cont++;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {}
+        }
+        // Pego ou Não uma Resposta
+        Message response = messageRepository.findOne(request.getId());
+        // Crio o Objeto que Será Retornado
+        List<PessoaDto> pessoasDto = null;
+        if (response != null) {
+            // Verifico o Status da Resposta
+            if (response.getStatus() == Status.OK) {
+                // Verifico se a Resposta Contem os Objetos Consultados
+                if (!response.containsParam("pessoas")) {
+                    throw new UnsupportedOperationException("A Resposta Não Contém o Parâmetro da Consulta: " + "pessoas");
+                }
+                // Pego Todos os parâmetros
+                Map<String, Object> params = response.getParams();
+                // Crio um Objeto para Converter a Lista de Pessoas, é Necessário por ser uma Lista
+                ObjectMapper objectMapper = new ObjectMapper();
+                // Converte o Objeto do Map em um List<PessoaJson>, foi necessário usar o TypeReference
+                List<PessoaJson> pessoasJson = objectMapper.convertValue(params.get("pessoas"), new TypeReference<List<PessoaJson>>() { });
+                // Instancio o Objeto de Retorno
+                pessoasDto = new ArrayList<>();
+                // Converto e Adiciono ao Objeto de Retorno
+                PessoaDto pessoaDto;
+                for (PessoaJson pessoaJson : pessoasJson) {
+                    pessoaDto = new PessoaDto();
+                    mapper.map(pessoaJson, pessoaDto);
+                    pessoasDto.add(pessoaDto);
+                }
+            } else {
+                if (response.getStatus() == Status.ERRO) {
+                    throw new UnsupportedOperationException("A Consulta Retornou Com ERRO: " + response.getParam("erro"));
+                }
+                // Erro de Status
+                throw new UnsupportedOperationException("O Status da Resposta é Inválido: " + response.getStatus().name());
+            }
+            // Removo a Mensagem do Repositório
+            messageRepository.remove(request.getId());
+        } else {
+            throw new UnsupportedOperationException("Operação Sem Resposta.");
+        }
+        // Retorno a Consulta
         return pessoasDto;
     }
     
