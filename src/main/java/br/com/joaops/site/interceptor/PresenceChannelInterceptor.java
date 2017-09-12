@@ -35,25 +35,25 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
         String sessionId = sha.getSessionId();
         switch(sha.getCommand()) {
             case CONNECT:
-                System.out.println("STOMP Connect [sessionId: " + sessionId + "]");
+                //System.out.println("STOMP Connect [sessionId: " + sessionId + "]");
                 String name = sha.getMessageHeaders().get("simpUser", UsernamePasswordAuthenticationToken.class).getName();
-                System.out.println("STOMP Connect [name: " + name + "]");
+                //System.out.println("STOMP Connect [name: " + name + "]");
                 repository.add(name, sessionId);
                 break;
             case CONNECTED:
-                System.out.println("STOMP Connected [sessionId: " + sessionId + "]");
+                //System.out.println("STOMP Connected [sessionId: " + sessionId + "]");
                 break;
             case DISCONNECT:
-                System.out.println("STOMP Disconnect [sessionId: " + sessionId + "]");
+                //System.out.println("STOMP Disconnect [sessionId: " + sessionId + "]");
                 String name2 = sha.getMessageHeaders().get("simpUser", UsernamePasswordAuthenticationToken.class).getName();
-                System.out.println("STOMP Disconnect [name: " + name2 + "]");
+                //System.out.println("STOMP Disconnect [name: " + name2 + "]");
                 repository.remove(name2);
                 break;
             case ERROR:
-                System.out.println("STOMP Error [sessionId: " + sessionId + "]");
+                //System.out.println("STOMP Error [sessionId: " + sessionId + "]");
                 break;
             default:
-                System.out.println("Default");
+                //System.out.println("Default");
                 break;
         }
     }
