@@ -12,13 +12,13 @@ import br.com.joaops.site.util.GeradorId;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-import org.dozer.Mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -37,8 +37,8 @@ import org.springframework.util.StringUtils;
 @Service("PessoaService")
 public class PessoaServiceImpl implements PessoaService {
     
-    @Autowired
-    private Mapper mapper;
+    //@Autowired
+    //private Mapper mapper;
     
     @Autowired
     private SimpMessagingTemplate simp;
@@ -60,10 +60,7 @@ public class PessoaServiceImpl implements PessoaService {
         Message request = new Message();
         request.setId(GeradorId.getNextId());
         request.setOperacao(CONSTANTES.COMANDOS.SALVAR_PESSOA);
-        PessoaJson json = new PessoaJson();
-        System.out.println("Data PessoaDto: " + pessoaDto.getNascimento().toString());
-        mapper.map(pessoaDto, json);
-        System.out.println("Data json: " + json.getNascimento().toString());
+        PessoaJson json = new PessoaJson(pessoaDto.getId(), pessoaDto.getNome(), new SimpleDateFormat("dd/MM/yyyy").format(pessoaDto.getNascimento()));
         request.setParam("pessoa", json);
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(sessionId);
@@ -91,8 +88,7 @@ public class PessoaServiceImpl implements PessoaService {
                     throw new UnsupportedOperationException("A Resposta Não Contém o Parâmetro da Consulta: " + "pessoa");
                 }
                 PessoaJson pessoaJson = new ObjectMapper().convertValue(response.getParam("pessoa"), PessoaJson.class);
-                dto = new PessoaDto();
-                mapper.map(pessoaJson, dto);
+                dto = new PessoaDto(pessoaJson.getId(), pessoaJson.getNome(), new SimpleDateFormat("dd/MM/yyyy").parse(pessoaJson.getNascimento()));
             } else {
                 if (response.getStatus() == Status.ERRO) {
                     throw new UnsupportedOperationException("A Consulta Retornou Com ERRO: " + response.getParam("erro"));
@@ -139,8 +135,7 @@ public class PessoaServiceImpl implements PessoaService {
                 }
                 // Fazer Assim Para Converter Tipos Complexos
                 PessoaJson pessoaJson = new ObjectMapper().convertValue(response.getParam("pessoa"), PessoaJson.class);
-                pessoaDto = new PessoaDto();
-                mapper.map(pessoaJson, pessoaDto);
+                pessoaDto = new PessoaDto(pessoaJson.getId(), pessoaJson.getNome(), new SimpleDateFormat("dd/MM/yyyy").parse(pessoaJson.getNascimento()));
             } else {
                 if (response.getStatus() == Status.ERRO) {
                     throw new UnsupportedOperationException("A Consulta Retornou Com ERRO: " + response.getParam("erro"));
@@ -244,8 +239,7 @@ public class PessoaServiceImpl implements PessoaService {
                 // Converto e Adiciono ao Objeto de Retorno
                 PessoaDto pessoaDto;
                 for (PessoaJson pessoaJson : pessoasJson) {
-                    pessoaDto = new PessoaDto();
-                    mapper.map(pessoaJson, pessoaDto);
+                    pessoaDto = new PessoaDto(pessoaJson.getId(), pessoaJson.getNome(), new SimpleDateFormat("dd/MM/yyyy").parse(pessoaJson.getNascimento()));
                     pessoasDto.add(pessoaDto);
                 }
             } else {
