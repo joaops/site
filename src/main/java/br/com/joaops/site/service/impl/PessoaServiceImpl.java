@@ -61,7 +61,9 @@ public class PessoaServiceImpl implements PessoaService {
         request.setId(GeradorId.getNextId());
         request.setOperacao(CONSTANTES.COMANDOS.SALVAR_PESSOA);
         PessoaJson json = new PessoaJson();
+        System.out.println("Data PessoaDto: " + pessoaDto.getNascimento().toString());
         mapper.map(pessoaDto, json);
+        System.out.println("Data json: " + json.getNascimento().toString());
         request.setParam("pessoa", json);
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(sessionId);

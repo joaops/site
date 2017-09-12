@@ -83,7 +83,7 @@ public class PessoaController {
     }
     
     @RequestMapping(value = "/pessoa/salvar", method = RequestMethod.POST)
-    public ModelAndView salvar(HttpServletRequest request, HttpServletResponse response, TimeZone timezone, @ModelAttribute("pessoa") @Valid PessoaDto pessoa, BindingResult result) {
+    public ModelAndView salvar(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("pessoa") @Valid PessoaDto pessoa, BindingResult result) {
         ModelAndView mav;
         if (result.hasErrors()) {
             mav = new ModelAndView("/pessoa/cadastrar");
@@ -95,13 +95,6 @@ public class PessoaController {
             }
         } else {
             try {
-                System.out.println("Data: " + pessoa.getNascimento().toString());
-                System.out.println("TimeZone: " + timezone.getDisplayName());
-                // Arruma o TimeZone
-                SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
-                isoFormat.setTimeZone(timezone);
-                Date date = isoFormat.parse(isoFormat.format(pessoa.getNascimento()));
-                pessoa.setNascimento(date);
                 pessoaService.save(pessoa);
                 mav = new ModelAndView("redirect:/pessoa");
             } catch (Exception e) {
